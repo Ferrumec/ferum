@@ -10,20 +10,22 @@ permissions:
 
 env:
   CARGO_TERM_COLOR: always
-  BINARY_NAME: ferum # Replace with your Cargo binary target name
+  BINARY_NAME: my-app # Replace with your Cargo binary target name
 
 jobs:
   build:
-    name: Build Linux ${{ matrix.arch }}
-    runs-on: ${{ matrix.runner }}
+    name: Build ${{ matrix.asset }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
         include:
-          - arch: x86_64
-            runner: ubuntu-latest
-          - arch: aarch64
-            runner: ubuntu-24.04-arm
+          - asset: linux-x86_64
+            target: x86_64-unknown-linux-gnu
+            android: false
+          - asset: android-aarch64
+            target: aarch64-linux-android
+            android: true
 
     steps:
       - name: Checkout
@@ -31,14 +33,31 @@ jobs:
 
       - name: Install stable Rust
         uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
 
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          key: ${{ matrix.arch }}
+          key: ${{ matrix.target }}
 
-      - name: Build optimized binary
-        run: cargo build --locked --release --bin "$BINARY_NAME"
+      - name: Install cargo-ndk
+        if: matrix.android
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-ndk
+
+      - name: Build optimized binary (Linux)
+        if: ${{ !matrix.android }}
+        run: cargo build --locked --release --target "${{ matrix.target }}" --bin "$BINARY_NAME"
+
+      - name: Build optimized binary (Android)
+        if: matrix.android
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_NDK_LATEST_HOME }}
+        run: |
+          cargo ndk --platform 24 --target arm64-v8a \
+            build --locked --release --bin "$BINARY_NAME"
 
       - name: Package binary and checksum
         shell: bash
@@ -46,10 +65,10 @@ jobs:
           set -euo pipefail
 
           VERSION="${GITHUB_REF_NAME}"
-          ARCHIVE="${BINARY_NAME}-${VERSION}-linux-${{ matrix.arch }}.tar.gz"
+          ARCHIVE="${BINARY_NAME}-${VERSION}-${{ matrix.asset }}.tar.gz"
 
           mkdir -p dist
-          install -m 755 "target/release/${BINARY_NAME}" "dist/${BINARY_NAME}"
+          install -m 755 "target/${{ matrix.target }}/release/${BINARY_NAME}" "dist/${BINARY_NAME}"
 
           tar -C dist -czf "dist/${ARCHIVE}" "${BINARY_NAME}"
           cd dist
@@ -59,7 +78,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: release-${{ matrix.arch }}
+          name: release-${{ matrix.asset }}
           path: |
             dist/*.tar.gz
             dist/*.sha256
