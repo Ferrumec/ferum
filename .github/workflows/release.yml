@@ -1,56 +1,56 @@
 name: Rust Production Release
 
 on:
-push:
-tags:
-- "v*"
+  push:
+    tags:
+      - "v*"
 
 permissions:
-contents: write
+  contents: write
 
 env:
-CARGO_TERM_COLOR: always
-BINARY_NAME: my-app # Replace with your Cargo binary target name
+  CARGO_TERM_COLOR: always
+  BINARY_NAME: my-app # Replace with your Cargo binary target name
 
 jobs:
-release:
-name: Build Linux x86_64 release
-runs-on: ubuntu-latest
+  release:
+    name: Build Linux x86_64 release
+    runs-on: ubuntu-latest
 
-steps:
-  - name: Checkout
-    uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  - name: Install stable Rust
-    uses: dtolnay/rust-toolchain@stable
+      - name: Install stable Rust
+        uses: dtolnay/rust-toolchain@stable
 
-  - name: Cache dependencies
-    uses: Swatinem/rust-cache@v2
+      - name: Cache dependencies
+        uses: Swatinem/rust-cache@v2
 
-  - name: Build optimized binary
-    run: cargo build --locked --release --bin "$BINARY_NAME"
+      - name: Build optimized binary
+        run: cargo build --locked --release --bin "$BINARY_NAME"
 
-  - name: Package binary and checksum
-    shell: bash
-    run: |
-      set -euo pipefail
+      - name: Package binary and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
 
-      VERSION="${GITHUB_REF_NAME}"
-      ARCHIVE="${BINARY_NAME}-${VERSION}-linux-x86_64.tar.gz"
+          VERSION="${GITHUB_REF_NAME}"
+          ARCHIVE="${BINARY_NAME}-${VERSION}-linux-x86_64.tar.gz"
 
-      mkdir -p dist
-      install -m 755 "target/release/${BINARY_NAME}" "dist/${BINARY_NAME}"
+          mkdir -p dist
+          install -m 755 "target/release/${BINARY_NAME}" "dist/${BINARY_NAME}"
 
-      tar -C dist -czf "dist/${ARCHIVE}" "${BINARY_NAME}"
-      cd dist
-      sha256sum "${ARCHIVE}" > "${ARCHIVE}.sha256"
+          tar -C dist -czf "dist/${ARCHIVE}" "${BINARY_NAME}"
+          cd dist
+          sha256sum "${ARCHIVE}" > "${ARCHIVE}.sha256"
 
-  - name: Create GitHub Release
-    env:
-      GH_TOKEN: ${{ github.token }}
-    run: |
-      gh release create "${GITHUB_REF_NAME}" \
-        dist/*.tar.gz \
-        dist/*.sha256 \
-        --title "${GITHUB_REF_NAME}" \
-        --generate-notes
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" \
+            dist/*.tar.gz \
+            dist/*.sha256 \
+            --title "${GITHUB_REF_NAME}" \
+            --generate-notes
