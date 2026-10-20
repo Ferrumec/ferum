@@ -13,9 +13,17 @@ env:
   BINARY_NAME: my-app # Replace with your Cargo binary target name
 
 jobs:
-  release:
-    name: Build Linux x86_64 release
-    runs-on: ubuntu-latest
+  build:
+    name: Build Linux ${{ matrix.arch }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - arch: x86_64
+            runner: ubuntu-latest
+          - arch: aarch64
+            runner: ubuntu-24.04-arm
 
     steps:
       - name: Checkout
@@ -26,6 +34,8 @@ jobs:
 
       - name: Cache dependencies
         uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.arch }}
 
       - name: Build optimized binary
         run: cargo build --locked --release --bin "$BINARY_NAME"
@@ -36,7 +46,7 @@ jobs:
           set -euo pipefail
 
           VERSION="${GITHUB_REF_NAME}"
-          ARCHIVE="${BINARY_NAME}-${VERSION}-linux-x86_64.tar.gz"
+          ARCHIVE="${BINARY_NAME}-${VERSION}-linux-${{ matrix.arch }}.tar.gz"
 
           mkdir -p dist
           install -m 755 "target/release/${BINARY_NAME}" "dist/${BINARY_NAME}"
@@ -44,10 +54,34 @@ jobs:
           tar -C dist -czf "dist/${ARCHIVE}" "${BINARY_NAME}"
           cd dist
           sha256sum "${ARCHIVE}" > "${ARCHIVE}.sha256"
+          rm "${BINARY_NAME}"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.arch }}
+          path: |
+            dist/*.tar.gz
+            dist/*.sha256
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: release-*
+          merge-multiple: true
 
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           gh release create "${GITHUB_REF_NAME}" \
             dist/*.tar.gz \
