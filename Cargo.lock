@@ -1015,7 +1015,7 @@ dependencies = [
 [[package]]
 name = "blogs"
 version = "0.1.0"
-source = "git+https://github.com/Ferrumec/blogs#c44756ee4f6aebca6e121e147f68394acb5cf859"
+source = "git+https://github.com/Ferrumec/blogs#707454b85a0d62dcc46216d276818d5e6f4c2e78"
 dependencies = [
  "actix-web",
  "async-trait",
