@@ -34,6 +34,7 @@ RUN apt-get update \
 
 WORKDIR /home/ferum
 COPY --from=builder /app/target/release/ferum /usr/local/bin/ferum
+COPY permissions.json ./permissions.json
 
 USER ferum
 
