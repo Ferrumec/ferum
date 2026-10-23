@@ -1005,7 +1005,7 @@ dependencies = [
 [[package]]
 name = "blogs"
 version = "0.1.0"
-source = "git+https://github.com/Ferrumec/blogs#707454b85a0d62dcc46216d276818d5e6f4c2e78"
+source = "git+https://github.com/Ferrumec/blogs#4e7dd129706e1666a202207c6f78c69e9fa9b6f0"
 dependencies = [
  "actix-web",
  "async-trait",
@@ -2836,7 +2836,7 @@ checksum = "e94e1e6445d314f972ff7395df2de295fe51b71821694f0b0e1e79c4f12c8577"
 [[package]]
 name = "notification"
 version = "0.1.0"
-source = "git+https://github.com/Austin-rgb/notification#5534b0f2c62c0fbc8c5eac7ddc0e8682476b4d33"
+source = "git+https://github.com/Austin-rgb/notification#2bf8f367c772879a2fd10882cabff4642e5bf8eb"
 dependencies = [
  "actix",
  "actix-web",
@@ -3326,7 +3326,7 @@ dependencies = [
  "quinn-udp",
  "rustc-hash",
  "rustls 0.23.46",
- "socket2 0.6.5",
+ "socket2 0.5.10",
  "thiserror 2.0.21",
  "tokio",
  "tracing",
@@ -3365,7 +3365,7 @@ dependencies = [
  "cfg_aliases",
  "libc",
  "once_cell",
- "socket2 0.6.5",
+ "socket2 0.5.10",
  "tracing",
  "windows-sys 0.61.2",
 ]
