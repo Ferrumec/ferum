@@ -40,8 +40,7 @@ USER ferum
 # The gateway port the frontend proxies to (GATEWAY_URL, default 8080).
 EXPOSE 8080
 
-# Configuration (database, session/auth secrets, email provider, S3, the
-# *_SUBJECTS allow-lists, ...) comes from the environment: pass it with
-# `--env-file .env` or your orchestrator. main.rs also loads a `.env` from the
-# working directory if one is present.
-CMD ["ferum"]
+# Configuration (database, session/auth secrets, etc.) comes from the environment.
+# Render provides permissions.json as a secret file.
+CMD ["sh", "-c", "ln -sf /etc/secrets/permissions.json /home/ferum/permissions.json && exec /usr/local/bin/ferum"]
+
