@@ -1,3 +1,4 @@
+
 name: Rust Production Release
 
 on:
@@ -41,6 +42,17 @@ jobs:
         with:
           key: ${{ matrix.target }}
 
+      # Linux only: cross-link against GLIBC 2.36
+      - name: Install Zig
+        if: ${{ !matrix.android }}
+        uses: mlugg/setup-zig@v2
+
+      - name: Install cargo-zigbuild
+        if: ${{ !matrix.android }}
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-zigbuild
+
       - name: Install cargo-ndk
         if: matrix.android
         uses: taiki-e/install-action@v2
@@ -49,7 +61,10 @@ jobs:
 
       - name: Build optimized binary (Linux)
         if: ${{ !matrix.android }}
-        run: cargo build --locked --release --target "${{ matrix.target }}" --bin "$BINARY_NAME"
+        run: |
+          cargo zigbuild --locked --release \
+            --target "${{ matrix.target }}.2.36" \
+            --bin "$BINARY_NAME"
 
       - name: Build optimized binary (Android)
         if: matrix.android
@@ -58,6 +73,14 @@ jobs:
           echo "Using NDK at: $ANDROID_NDK_HOME"
           cargo ndk --platform 24 --target arm64-v8a \
             build --locked --release --bin "$BINARY_NAME"
+
+      - name: Verify Linux GLIBC requirements
+        if: ${{ !matrix.android }}
+        run: |
+          readelf --version-info \
+            "target/${{ matrix.target }}/release/${BINARY_NAME}" \
+            | grep -oE 'GLIBC_[0-9.]+' \
+            | sort -Vu || true
 
       - name: Package binary and checksum
         shell: bash
@@ -68,7 +91,9 @@ jobs:
           ARCHIVE="${BINARY_NAME}-${VERSION}-${{ matrix.asset }}.tar.gz"
 
           mkdir -p dist
-          install -m 755 "target/${{ matrix.target }}/release/${BINARY_NAME}" "dist/${BINARY_NAME}"
+          install -m 755 \
+            "target/${{ matrix.target }}/release/${BINARY_NAME}" \
+            "dist/${BINARY_NAME}"
 
           tar -C dist -czf "dist/${ARCHIVE}" "${BINARY_NAME}"
           cd dist
