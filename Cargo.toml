@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-ferrumec = { version = "0.4.3", features = ["launch"] }
+ferrumec = { version = "0.4.7", features = ["launch"] }
 authz = { git="https://github.com/Ferrumec/authz" }
 authnz = { git="https://github.com/Ferrumec/authnz" }
 blogs = { git = "https://github.com/Ferrumec/blogs" }

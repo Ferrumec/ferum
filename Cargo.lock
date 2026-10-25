@@ -1773,9 +1773,9 @@ checksum = "da7c62ceae207dd37ea5b845da6a0696c799f85e97da1ab5b7910be3c1c80223"
 
 [[package]]
 name = "ferrumec"
-version = "0.4.6"
+version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8c070a053e728d811efe6e3816dc5dc3e237509640e50ea67f2212be7183a45f"
+checksum = "e3ec0a595b83b267313eef2ff79a941e9e01ecd675345fe6aacf4ead05655c4e"
 dependencies = [
  "actix-files",
  "actix-web",
@@ -3326,7 +3326,7 @@ dependencies = [
  "quinn-udp",
  "rustc-hash",
  "rustls 0.23.46",
- "socket2 0.5.10",
+ "socket2 0.6.5",
  "thiserror 2.0.21",
  "tokio",
  "tracing",
@@ -3365,7 +3365,7 @@ dependencies = [
  "cfg_aliases",
  "libc",
  "once_cell",
- "socket2 0.5.10",
+ "socket2 0.6.5",
  "tracing",
  "windows-sys 0.61.2",
 ]
