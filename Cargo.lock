@@ -1424,9 +1424,9 @@ dependencies = [
 
 [[package]]
 name = "ctutils"
-version = "0.4.6"
+version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fe3e9d21d39e6f39ff46e03d5b621424f88ee23d8a1672c6bfc9ccc7f2da4f6a"
+checksum = "a2376ffd6f96d8a9db59875b4b6b0237d6900b5baf64279714e05493ce64828a"
 dependencies = [
  "cmov",
  "subtle",
@@ -1781,21 +1781,20 @@ dependencies = [
 
 [[package]]
 name = "ferrumec-main"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "828bedb89a572e9c4b356e2a1fffedf9bafd8118aa2fe654cf5d9e800c543404"
+checksum = "49d66e03e1a13aad744f924be4e84220e4ef50c13a8872ee34321facc8e0b965"
 dependencies = [
  "actix-files",
  "actix-web",
  "ferrumec",
  "ferrumec-perms",
+ "futures-util",
  "opentelemetry",
  "opentelemetry-appender-tracing",
  "opentelemetry-otlp",
  "opentelemetry_sdk",
  "tracing",
- "tracing-actix-web",
- "tracing-opentelemetry",
  "tracing-subscriber",
 ]
 
@@ -1828,6 +1827,7 @@ dependencies = [
  "dotenvy",
  "ferrumec",
  "ferrumec-main",
+ "inbox",
  "notification",
  "s3-upload",
 ]
@@ -2535,6 +2535,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2d3a73c82a0b0747dba739b380c046a140b5ae747234bf701df3460282da7193"
 
 [[package]]
+name = "inbox"
+version = "0.1.0"
+source = "git+https://github.com/ferrum-index/inbox#ca6ea6c78099748a5fb41a094232c1a7145d8239"
+dependencies = [
+ "actix-web",
+ "ferrumec",
+ "serde",
+ "sqlx",
+ "tracing",
+ "uuid",
+ "viewset",
+]
+
+[[package]]
 name = "indexmap"
 version = "2.14.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2853,7 +2867,7 @@ checksum = "e94e1e6445d314f972ff7395df2de295fe51b71821694f0b0e1e79c4f12c8577"
 [[package]]
 name = "notification"
 version = "0.1.0"
-source = "git+https://github.com/Austin-rgb/notification#087d0b1b459374988d5b50abaa055c64b757223e"
+source = "git+https://github.com/Austin-rgb/notification#1091cfe6e30fea9aba82396a095d82a1a0ec327d"
 dependencies = [
  "actix",
  "actix-web",
@@ -2861,6 +2875,7 @@ dependencies = [
  "anyhow",
  "async-trait",
  "base64 0.23.1",
+ "chrono",
  "ferrumec",
  "http 1.5.0",
  "rand 0.10.3",
@@ -4729,22 +4744,6 @@ dependencies = [
  "log",
  "once_cell",
  "tracing-core",
-]
-
-[[package]]
-name = "tracing-opentelemetry"
-version = "0.34.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a904802a1b902f43638b677ff2a650847e3b4404101b6c586d648e8c1e3e8fe"
-dependencies = [
- "js-sys",
- "opentelemetry",
- "smallvec",
- "tracing",
- "tracing-core",
- "tracing-log",
- "tracing-subscriber",
- "web-time",
 ]
 
 [[package]]
