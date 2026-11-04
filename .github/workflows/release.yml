@@ -14,6 +14,7 @@ permissions:
 env:
   CARGO_TERM_COLOR: always
   BINARY_NAME: ferum
+  CARGO_NET_GIT_FETCH_WITH_CLI: "true"
 
 jobs:
   build:
@@ -33,6 +34,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
 
       - name: Install stable Rust
         uses: dtolnay/rust-toolchain@stable
@@ -92,7 +95,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          VERSION="${GITHUB_REF_NAME}"
+          VERSION="${{ inputs.tag }}"
           ARCHIVE="${BINARY_NAME}-${VERSION}-${{ matrix.asset }}.tar.gz"
 
           mkdir -p dist
@@ -132,8 +135,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" \
+          gh release create "${{ inputs.tag }}" \
             dist/*.tar.gz \
             dist/*.sha256 \
-            --title "${GITHUB_REF_NAME}" \
+            --title "${{ inputs.tag }}" \
+            --target "${{ github.sha }}" \
             --generate-notes
