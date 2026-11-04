@@ -4,13 +4,16 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-ferrumec-main = "0.1.3"
+ferrumec-main = "0.1.4"
 authz = { git="https://github.com/Ferrumec/authz" }
 authnz = { git="https://github.com/Ferrumec/authnz" }
 blogs = { git = "https://github.com/Ferrumec/blogs" }
 s3-upload = { git = "https://github.com/Ferrumec/s3-upload" }
 notification = { git="https://github.com/Austin-rgb/notification" }
 inbox = {git="https://github.com/ferrum-index/inbox"}
+payment = { git = "https://github.com/Austin-rgb/payment" }
+subscriptions = { git = "https://github.com/ferrum-index/subscriptions" }
+recipes = { git = "https://github.com/ferrum-index/recipes"}
 actix-web = "4.15.0"
 dotenvy = "0.15.7"
-ferrumec = "0.5.0"
+ferrumec = { version = "0.5.0", }

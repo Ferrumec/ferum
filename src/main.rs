@@ -2,16 +2,19 @@ use authnz::AuthnModule;
 use authz::Module as AuthzModule;
 use blogs::Module as BlogsModule;
 use dotenvy::dotenv;
-use ferrumec::{LocalInfra,modules};
+use ferrumec::{infra::LocalInfra,modules};
 use ferrumec_main::{launch};
 use notification::NotificationModule;
 use s3_upload::Module as FilesModule;
 use inbox::InboxModule;
+use recipes::RecipesModule;
+use subscriptions::SubscriptionsModule;
+use payment::PaymentModule;
 
 #[actix_web::main]
 async fn main() {
     dotenv().ok();
     let infra = LocalInfra::new().await.expect("coould not connect infra");
-    let modls = modules![infra.clone();("auth",AuthnModule),("blogs",BlogsModule),("permissions",AuthzModule),("notifications",NotificationModule),("files",FilesModule),("inbox",InboxModule)].expect("could not bundle modules");
+    let modls = modules![infra.clone();("auth",AuthnModule),("blogs",BlogsModule),("permissions",AuthzModule),("notifications",NotificationModule),("files",FilesModule),("inbox",InboxModule),("subscriptions",SubscriptionsModule),("recipes",RecipesModule),("payment",PaymentModule)].expect("could not bundle modules");
     launch(modls, infra).await;
 }
