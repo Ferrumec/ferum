@@ -9,7 +9,7 @@ authz = { git="https://github.com/ferrum-index/authz" }
 authnz = { git="https://github.com/ferrum-index/authnz" }
 blogs = { git = "https://github.com/Ferrumec/blogs" }
 s3-upload = { git = "https://github.com/Ferrumec/s3-upload" }
-notification = { git="https://github.com/ferrum-index/notification" }
+notification = { git = "https://github.com/ferrum-index/notification" }
 inbox = {git="https://github.com/ferrum-index/inbox"}
 payment = { git = "https://github.com/Austin-rgb/payment" }
 subscriptions = { git = "https://github.com/ferrum-index/subscriptions" }
