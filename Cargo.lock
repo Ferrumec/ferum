@@ -401,7 +401,7 @@ checksum = "1505bd5d3d116872e7271a6d4e16d81d0c8570876c8de68093a09ac269d8aac0"
 [[package]]
 name = "authnz"
 version = "0.1.3"
-source = "git+https://github.com/ferrum-index/authnz#53b57f366dcfc5a9db39cebe0515b6ea0be9f2cf"
+source = "git+https://github.com/ferrum-index/authnz#685bae737a38b3b54493ce6a2e312345feb1596e"
 dependencies = [
  "actix-web",
  "actixutils",
@@ -1715,7 +1715,7 @@ checksum = "e079f19b08ca6239f47f8ba8509c11cf3ea30095831f7fed61441475edd8c449"
 [[package]]
 name = "emailgrid"
 version = "0.1.0"
-source = "git+https://github.com/Austin-rgb/emailgrid#813f45c7e9a9f939064acc7a3ce30ae36bf99873"
+source = "git+https://github.com/Austin-rgb/emailgrid#c0df23bf6aa041567880cfe4629557ec7a3fe0ca"
 dependencies = [
  "anyhow",
  "async-trait",
@@ -3483,7 +3483,7 @@ dependencies = [
  "quinn-udp",
  "rustc-hash",
  "rustls 0.23.46",
- "socket2 0.6.5",
+ "socket2 0.5.10",
  "thiserror 2.0.21",
  "tokio",
  "tracing",
@@ -3522,7 +3522,7 @@ dependencies = [
  "cfg_aliases",
  "libc",
  "once_cell",
- "socket2 0.6.5",
+ "socket2 0.5.10",
  "tracing",
  "windows-sys 0.61.2",
 ]
